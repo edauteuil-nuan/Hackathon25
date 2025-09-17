@@ -1,5 +1,5 @@
 import sqlite3
-
+from pathlib import Path
 
 # Generate a New SQL Lite Table that Eliminates Non-Relevant Fields
 # Based on the "Relevant" Column in the Definitions Table
@@ -53,7 +53,7 @@ def create_dynamic_view(db_path, view_name, base_table, definitions_table):
 
 
 def main():
-    db_path = "C:\\Projects\\Hackathon\\Hackathon25\\cms_synthetic_claims\\cms_synthetic_claims.db"
+    db_path = str((Path(__file__).parent.parent) / "cms_synthetic_claims.db")
     claims_table = "raw_cms_claims"
     definitions_table = "raw_claim_definitions"
     create_dynamic_view(db_path=db_path, view_name="relevant_claims_view", base_table=claims_table, definitions_table=definitions_table)

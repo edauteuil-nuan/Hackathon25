@@ -54,8 +54,8 @@ def import_excel_to_sqlite(excel_file_path, sqlite_db_path, table_name=None):
 
 def main():
     # Example usage
-    excel_file = "C:\\Projects\\Hackathon\\Hackathon25\\cms_synthetic_claims\\claim_definitions.xlsx"
-    db_file = "C:\\Projects\\Hackathon\\Hackathon25\\cms_synthetic_claims\\cms_synthetic_claims.db"
+    excel_file = str((Path(__file__).parent.parent) / "claim_definitions.xlsx")
+    db_file = str((Path(__file__).parent.parent) / "cms_synthetic_claims.db")
     
     if not db_file:
         db_file = "data.db"
