@@ -51,3 +51,31 @@ def import_excel_to_sqlite(excel_file_path, sqlite_db_path, table_name=None):
     except Exception as e:
         print(f"Error: {e}")
         sys.exit(1)
+
+def init_fraud_table(sqlite_db_path):
+    """
+    Initialize a fraud table to store detected fraudulent claims.
+    """
+    try:
+        conn = sqlite3.connect(sqlite_db_path)
+        cursor = conn.cursor()
+        
+        # Create fraud table if it doesn't exist
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS fraud (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                CLM_ID TEXT,
+                model_name TEXT,
+                score REAL,
+                detected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+        
+        conn.commit()
+        print("Fraud table initialized successfully.")
+        
+        conn.close()
+        
+    except Exception as e:
+        print(f"Error initializing fraud table: {e}")
+        sys.exit(1)
