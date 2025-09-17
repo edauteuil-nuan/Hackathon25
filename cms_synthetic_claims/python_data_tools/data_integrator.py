@@ -1,5 +1,7 @@
 import sqlite3
 from pathlib import Path
+import pandas as pd
+from sklearn.model_selection import train_test_split
 
 # Generate a New SQL Lite Table that Eliminates Non-Relevant Fields
 # Based on the "Relevant" Column in the Definitions Table
@@ -46,10 +48,35 @@ def create_dynamic_view(db_path, view_name, base_table, definitions_table):
     except Exception as e:
         print(f"Error creating view: {e}")
 
+def split_dataset(db_path, table_name, train_ratio=0.8):
+    """
+    Split the dataset into training and testing sets.
 
+    Args:
+        db_path (str): Path to the SQLite database
+        table_name (str): Name of the table to split
+        train_ratio (float): Proportion of the dataset to include in the training set
 
+    """
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect(db_path)
 
+        # Read the table into a pandas DataFrame
+        df = pd.read_sql_query(f"SELECT * FROM {table_name}", conn)
 
+        # Randomly split using sklearn
+        train_df, test_df = train_test_split(df, train_size=train_ratio, random_state=42)
+
+        # Save splits back to database
+        train_df.to_sql(f"{table_name}_train", conn, if_exists="replace", index=False)
+        test_df.to_sql(f"{table_name}_test", conn, if_exists="replace", index=False)
+
+        print(f"Dataset randomly split into training ({len(train_df)} rows) and testing ({len(test_df)} rows) sets.")
+
+        conn.close()
+    except Exception as e:
+        print(f"Error splitting dataset: {e}")
 
 
 def main():
