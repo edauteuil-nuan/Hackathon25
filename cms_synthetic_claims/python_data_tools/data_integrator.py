@@ -1,4 +1,5 @@
 import sqlite3
+from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
@@ -79,7 +80,7 @@ def split_dataset(db_path, table_name, train_ratio=0.8):
 
 
 def main():
-    db_path = "C:\\Projects\\Hackathon\\Hackathon25\\cms_synthetic_claims\\cms_synthetic_claims.db"
+    db_path = str((Path(__file__).parent.parent) / "cms_synthetic_claims.db")
     claims_table = "raw_cms_claims"
     definitions_table = "raw_claim_definitions"
     create_dynamic_view(db_path=db_path, view_name="relevant_claims_view", base_table=claims_table, definitions_table=definitions_table)
