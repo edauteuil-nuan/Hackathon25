@@ -107,7 +107,6 @@ def score_length_of_stay(sqlite_db_path, fraud_threshold):
     df_inpatient_claims_subset.drop(columns=['SECONDARY_DGNS_CD', 'SECONDARY_DGNS_CD_dup'], inplace=True)
     
     # run the random forest length of stay prediction model
-    ##### THESE MODELS ASSUMED A CLM WAS UNIQUE, BUT IT IS NOT. NEED TO FIX THIS #####
     root_dir = Path(__file__).parent
     rf_length_of_stay = joblib.load(root_dir / "models/rf-length-of-stay.pkl")
 
