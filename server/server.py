@@ -30,7 +30,7 @@ def init_database(sqlite_db_path):
     init_fraud_table(db_file)
 
 def main():
-    init_db = True
+    init_db = False
     db_file = "fraud.db"
 
     if not Path(db_file).exists():
