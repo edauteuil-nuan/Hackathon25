@@ -2,6 +2,7 @@ import pandas as pd
 import sqlite3
 import joblib
 from pathlib import Path
+from scoring import calculate_score
 
 secondary_diagnosis_cols = [f'ICD_DGNS_CD{i}' for i in range(1, 26)]
 secondary_diagnosis_tmean_cols = [f'ICD_DGNS_CD{i}_TMEAN' for i in range(1, 26)]
@@ -132,6 +133,7 @@ def init_lengthOfStay_db_tables(sqlite_db_path):
     init_claims_length_table(conn)
     init_prncpal_dgns_cd_tmean_table(conn)
     init_secondary_dgns_cd_tmean_table(conn)
+    init_prediction_table(conn)
 
     conn.close()
 
@@ -208,7 +210,8 @@ def score_length_of_stay(sqlite_db_path, fraud_threshold):
 
     df_fraud_length_of_stay['model_name'] = 'iso_diff-length-of-stay'
     df_fraud_length_of_stay_to_write = df_fraud_length_of_stay[['CLM_ID', 'model_name', 'CLM_NUM_DAYS_IFOREST_DIFF_SCORE']].copy()
-    df_fraud_length_of_stay_to_write.rename(columns={'CLM_NUM_DAYS_IFOREST_DIFF_SCORE': 'score'}, inplace=True)
+    df_fraud_length_of_stay_to_write['score'] = df_fraud_length_of_stay_to_write['CLM_NUM_DAYS_IFOREST_DIFF_SCORE'].apply(calculate_score)
+    df_fraud_length_of_stay_to_write.drop(columns=['CLM_NUM_DAYS_IFOREST_DIFF_SCORE'], inplace=True)
 
     print(f"Found {len(df_fraud_length_of_stay_to_write)} claims with scores below the threshold {fraud_threshold}.")
 
