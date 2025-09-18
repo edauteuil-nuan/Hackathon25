@@ -3,6 +3,7 @@
 from pathlib import Path
 from sqlite import import_excel_to_sqlite, init_fraud_table
 from LengthOfState_rf_tmean import init_lengthOfStay_db_tables, score_length_of_stay
+from TotalCost_rf_tmean import init_totalCharge_db_tables, score_total_charge
 
 def init_database(sqlite_db_path):
     """
@@ -36,16 +37,19 @@ def main():
     if not Path(db_file).exists():
         init_database(db_file)
         init_db = True
+        print(f"Database file '{db_file}' created and initialized.")
     else:
         print(f"Database file '{db_file}' already exists. Skipping initialization.")
 
     # Initialize additional database tables
     if init_db:
         init_lengthOfStay_db_tables(db_file)
+        init_totalCharge_db_tables(db_file)
     else:
         print(f"Model Database tables already initialized. Skipping additional table setup.")
 
     score_length_of_stay(db_file, fraud_threshold=-0.1)
+    score_total_charge(db_file, fraud_threshold=-0.1)
 
 if __name__ == "__main__":
     main()
