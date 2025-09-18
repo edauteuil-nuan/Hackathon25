@@ -35,6 +35,7 @@ def main():
 
     if not Path(db_file).exists():
         init_database(db_file)
+        init_db = True
     else:
         print(f"Database file '{db_file}' already exists. Skipping initialization.")
 
