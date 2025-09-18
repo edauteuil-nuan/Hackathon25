@@ -65,7 +65,7 @@ def init_prediction_table(conn):
     # Create an empty table to store predictions
     cursor = conn.cursor()
     cursor.execute("""
-        CREATE TABLE "inpatient_length_of_stay_predictions" (
+        CREATE TABLE IF NOT EXISTS "inpatient_length_of_stay_predictions" (
 "CLM_ID" INTEGER,
   "PRNCPAL_DGNS_CD" TEXT,
   "CLM_NUM_DAYS" INTEGER,

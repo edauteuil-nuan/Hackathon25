@@ -48,7 +48,10 @@ def main():
     else:
         print(f"Model Database tables already initialized. Skipping additional table setup.")
 
+    print("scoring length of stay")
     score_length_of_stay(db_file, fraud_threshold=-0.1)
+
+    print("scoring total charge")
     score_total_charge(db_file, fraud_threshold=-0.1)
 
 if __name__ == "__main__":
