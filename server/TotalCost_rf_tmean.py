@@ -7,21 +7,6 @@ from scoring import calculate_score
 secondary_diagnosis_cols = [f'ICD_DGNS_CD{i}' for i in range(1, 26)]
 secondary_diagnosis_tmean_cols = [f'ICD_DGNS_CD{i}_TMEAN' for i in range(1, 26)]
 
-# def init_claims_charge_table(conn):
-#     try:
-#         df_inpatient_claims = pd.read_sql_query("SELECT * FROM cms_claims GROUP BY cms_claims.CLM_ID;", conn)
-#         print(f"cms_claims columns: {df_inpatient_claims.columns.tolist()}")
-#         print(f"cms_claims row count: {len(df_inpatient_claims)}")
-#         if 'CLM_ID' not in df_inpatient_claims.columns or 'CLM_TOT_CHRG_AMT' not in df_inpatient_claims.columns:
-#             print("ERROR: Required columns missing in cms_claims table.")
-#             return
-#         df_inpatient_subset = df_inpatient_claims[['CLM_ID', 'CLM_TOT_CHRG_AMT']].copy()
-#         print(f"inpatient_claims_charge preview:\n{df_inpatient_subset.head()}")
-#         df_inpatient_subset.to_sql('inpatient_claims_charge', conn, if_exists='replace', index=False)
-#         print("inpatient_claims_charge table created successfully.")
-#     except Exception as e:
-#         print(f"ERROR creating inpatient_claims_charge table: {e}")
-
 def init_claims_prncpal_dgns_cd_tmean_table(conn):
     df_inpatient_claims = pd.read_sql_query("""
         SELECT *
@@ -133,7 +118,6 @@ def init_totalCharge_db_tables(sqlite_db_path):
     # Connect to the local SQLite database
     conn = sqlite3.connect(sqlite_db_path)
 
-    # init_claims_charge_table(conn)
     init_claims_prncpal_dgns_cd_tmean_table(conn)
     init_claims_secondary_dgns_cd_tmean_table(conn)
     init_prediction_table(conn)
